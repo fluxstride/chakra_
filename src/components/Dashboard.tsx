@@ -19,11 +19,11 @@ const Dashboard = () => {
   const [isVerified, setIsVerified] = useState(false);
   const user = null;
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  });
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/login");
+  //   }
+  // });
 
   return (
     <Box bg="#FAFAFA" height="100vh">

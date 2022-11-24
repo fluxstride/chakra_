@@ -1,10 +1,11 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Card,
   CardBody,
   Center,
+  Circle,
   Container,
   Flex,
   Heading,
@@ -13,14 +14,19 @@ import {
   MenuItem,
   MenuList,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { notes } from "../data";
+import CreateItemModal from "./CreateItemModal";
 import NotVerified from "./NotVerified";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [isVerified, setIsVerified] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const user = null;
 
   // useEffect(() => {
@@ -29,32 +35,13 @@ const Dashboard = () => {
   //   }
   // });
 
-  const notes = [
-    {
-      name: "Note 1",
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores quas assumenda adipisci veritatis eligendi rem obcaecati. Id architecto beatae similique enim sit! Temporibus unde accusamus iure fugit ut ipsa amet.",
-    },
-    {
-      name: "Note 2",
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores quas assumenda adipisci veritatis eligendi rem obcaecati. Id architecto beatae similique enim sit! Temporibus unde accusamus iure fugit ut ipsa amet.",
-    },
-    {
-      name: "Note 3",
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores quas assumenda adipisci veritatis eligendi rem obcaecati. Id architecto beatae similique enim sit! Temporibus unde accusamus iure fugit ut ipsa amet.",
-    },
-    {
-      name: "Note 4",
-      description:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolores quas assumenda adipisci veritatis eligendi rem obcaecati. Id architecto beatae similique enim sit! Temporibus unde accusamus iure fugit ut ipsa amet.",
-    },
-  ];
-
   return (
     <Box bg="#FAFAFA" height="100vh">
+      {/* check email verification */}
       {!isVerified && <NotVerified verificationLink="https:facebook.com" />}
+
+      {/* modal to create a new item */}
+      <CreateItemModal {...{ isOpen, onClose }} />
       <Box bg="#fff">
         <Container maxW={1600}>
           <Flex height="72px" px={2} justifyContent="space-between">
@@ -113,6 +100,19 @@ const Dashboard = () => {
             </Box>
           ))}
         </Flex>
+        <Circle
+          bg="#004CBD"
+          size="70px"
+          position="fixed"
+          bottom="40px"
+          right="40px"
+          zIndex={2}
+          shadow="md"
+          onClick={onOpen}
+          cursor="pointer"
+        >
+          <AddIcon color="#Fff" />
+        </Circle>
       </Container>
     </Box>
   );

@@ -5,6 +5,7 @@ import {
   Center,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
@@ -13,7 +14,7 @@ import {
   Link,
   Text,
 } from "@chakra-ui/react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import PageLink from "./common/PageLink";
 
@@ -21,21 +22,15 @@ const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClick = () => setShowPassword(!showPassword);
   const {
-    control,
+    register,
     handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-    },
-  });
+    formState: { errors, isSubmitting },
+  } = useForm();
 
   const onSubmit = (data: {}) => {
     console.log(data);
   };
+  console.log(errors);
 
   return (
     <Center bg="#FAFAFA" height="100vh" color="#000" p={4}>
@@ -59,47 +54,48 @@ const Login = () => {
         </Text>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Flex gap={4} direction="column">
-            <Controller
-              name="email"
-              control={control}
-              render={({ field }) => (
-                <FormControl isRequired>
-                  <FormLabel mb={0} fontWeight="semibold">
-                    Email
-                  </FormLabel>
-                  <Input
-                    borderWidth="1.2px"
-                    placeholder="Type your email address here"
-                    type="email"
-                    {...field}
-                  />
-                </FormControl>
-              )}
-            />
+            <FormControl isInvalid={errors?.email && true}>
+              <FormLabel mb={0} fontWeight="semibold">
+                Email
+              </FormLabel>
+              <Input
+                borderWidth="1.2px"
+                placeholder="Type your email address here"
+                type="email"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-zA-z]{2,3}$/,
+                    message: "Wrong email format!",
+                  },
+                })}
+              />
+              <FormErrorMessage>
+                <>{errors?.email && errors.email.message}</>
+              </FormErrorMessage>
+            </FormControl>
 
-            <Controller
-              name="password"
-              control={control}
-              render={({ field }) => (
-                <FormControl isRequired>
-                  <FormLabel mb={0} fontWeight="semibold">
-                    Password
-                  </FormLabel>
-                  <InputGroup>
-                    <Input
-                      borderWidth="1.2px"
-                      placeholder="Type your password address here"
-                      type={showPassword ? "text" : "password"}
-                      {...field}
-                    />
-                    <InputRightElement onClick={handleClick}>
-                      {showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                    </InputRightElement>
-                  </InputGroup>
-                </FormControl>
-              )}
-            />
-            <Button bg="#B7BCC3" color="#fff" type="submit">
+            <FormControl>
+              <FormLabel mb={0} fontWeight="semibold">
+                Password
+              </FormLabel>
+              <InputGroup>
+                <Input
+                  borderWidth="1.2px"
+                  placeholder="Type your password address here"
+                  type={showPassword ? "text" : "password"}
+                />
+                <InputRightElement onClick={handleClick}>
+                  {showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+            <Button
+              bg="#B7BCC3"
+              color="#fff"
+              type="submit"
+              isLoading={isSubmitting}
+            >
               Sign Up
             </Button>
           </Flex>

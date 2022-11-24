@@ -11,7 +11,6 @@ import {
   InputGroup,
   InputRightElement,
   Link,
-  Spacer,
   Text,
 } from "@chakra-ui/react";
 import { useForm, Controller } from "react-hook-form";
@@ -49,8 +48,8 @@ const Login = () => {
         borderColor="#F0F0F0"
         borderWidth="2px"
       >
-        <Heading size="md"> Create an Account</Heading>
-        <Text>
+        <Heading size="md"> Login</Heading>
+        <Text mb="2rem">
           If you have no account,
           <PageLink to="/signup">
             <Link as="span" ml={1} color="blue.600" fontWeight="semibold">

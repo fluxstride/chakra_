@@ -51,7 +51,7 @@ const SignUp = () => {
         <Text as="h1" fontSize="2xl" fontWeight="semibold">
           Create an Account
         </Text>
-        <Text>
+        <Text mb=".7rem">
           Already have an account?
           <PageLink to="/login ">
             <Link as="span" ml={1} color="blue.600" fontWeight="semibold">

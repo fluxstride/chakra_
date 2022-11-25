@@ -2,8 +2,6 @@ import { AddIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Card,
-  CardBody,
   Center,
   Circle,
   Container,
@@ -16,7 +14,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { notes } from "../data";
 import CreateItemModal from "./CreateItemModal";

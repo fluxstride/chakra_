@@ -102,7 +102,7 @@ const SignUp = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Flex gap={4} direction="column">
             <Flex mt="1.5rem" gap={2}>
-              <FormControl isInvalid={errors?.firstName && true}>
+              <FormControl isInvalid={errors?.first_name && true}>
                 <FormLabel mb={0} fontWeight="semibold">
                   First name
                 </FormLabel>
@@ -117,7 +117,7 @@ const SignUp = () => {
                   <>{errors?.first_name && errors.first_name.message}</>
                 </FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={errors?.lastName && true}>
+              <FormControl isInvalid={errors?.last_name && true}>
                 <FormLabel mb={0} fontWeight="semibold">
                   Last Name
                 </FormLabel>

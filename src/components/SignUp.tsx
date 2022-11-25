@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -16,18 +16,64 @@ import {
 import { useForm } from "react-hook-form";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import PageLink from "./common/PageLink";
+import PasswordValidationSignals from "./PasswordValidationSignals";
 
 const SignUp = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [PasswordValidations, setPasswordValidations] = useState({
+    hasUpperCase: {
+      status: false,
+      message: "Contains at least one uppercase letter",
+    },
+    hasMinimumLength: {
+      status: false,
+      message: "Contains eight characters",
+    },
+    hasANumber: {
+      status: false,
+      message: "Contains at least one number",
+    },
+    hasSpecialCharacter: {
+      status: false,
+      message: "Contains at least one symbol",
+    },
+  });
+
   const handleClick = () => setShowPassword(!showPassword);
+
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = async (data: {}) => {
-    console.log({ data });
+  const handlePasswordChange = ({ target: { value } }: any) => {
+    setPasswordValidations((prev) => ({
+      ...prev,
+      hasMinimumLength: {
+        ...prev.hasMinimumLength,
+        status: value.match(/[^ ]{8,16}$/),
+      },
+      hasSpecialCharacter: {
+        ...prev.hasSpecialCharacter,
+        status: value.match(/(?=.*?[#?!@$%^&*-])/),
+      },
+      hasUpperCase: {
+        ...prev.hasUpperCase,
+        status: value.match(/(?=.*?[A-Z])/),
+      },
+      hasANumber: {
+        ...prev.hasANumber,
+        status: value.match(/(?=.*?[0-9])/),
+      },
+    }));
+  };
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+
+    // signup(data);
+    // getItems();
   };
 
   return (
@@ -63,12 +109,12 @@ const SignUp = () => {
                 <Input
                   borderWidth="1.2px"
                   placeholder="First name"
-                  {...register("firstName", {
-                    required: "First Name is required",
+                  {...register("first_name", {
+                    required: "First Name is required!",
                   })}
                 />
                 <FormErrorMessage>
-                  <>{errors?.firstName && errors.firstName.message}</>
+                  <>{errors?.first_name && errors.first_name.message}</>
                 </FormErrorMessage>
               </FormControl>
               <FormControl isInvalid={errors?.lastName && true}>
@@ -79,12 +125,12 @@ const SignUp = () => {
                   borderWidth="1.2px"
                   placeholder="Last Name"
                   type="text"
-                  {...register("lastName", {
-                    required: "Last Name is required",
+                  {...register("last_name", {
+                    required: "Last Name is required!",
                   })}
                 />
                 <FormErrorMessage>
-                  <>{errors?.lastName && errors.lastName.message}</>
+                  <>{errors?.last_name && errors.last_name.message}</>
                 </FormErrorMessage>
               </FormControl>
             </Flex>
@@ -110,7 +156,7 @@ const SignUp = () => {
               </FormErrorMessage>
             </FormControl>
 
-            <FormControl>
+            <FormControl isInvalid={errors?.password && true}>
               <FormLabel mb={0} fontWeight="semibold">
                 Password
               </FormLabel>
@@ -119,11 +165,34 @@ const SignUp = () => {
                   borderWidth="1.2px"
                   placeholder="Type your password address here"
                   type={showPassword ? "text" : "password"}
+                  {...register("password", {
+                    required: "Password is required",
+                    pattern: {
+                      value:
+                        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                      message:
+                        "Password does not meet the minimum requirements!",
+                    },
+                    onChange: handlePasswordChange,
+                  })}
                 />
                 <InputRightElement onClick={handleClick}>
                   {showPassword ? <ViewOffIcon /> : <ViewIcon />}
                 </InputRightElement>
               </InputGroup>
+
+              <FormErrorMessage>
+                <>{errors?.password && errors.password.message}</>
+              </FormErrorMessage>
+
+              <Box textAlign="start" mt={2}>
+                {Object.keys(PasswordValidations).map((type) => (
+                  <PasswordValidationSignals
+                    key={type}
+                    {...{ PasswordValidations, type }}
+                  />
+                ))}
+              </Box>
             </FormControl>
             <Button
               bg="#B7BCC3"

@@ -63,7 +63,7 @@ const Login = () => {
                 placeholder="Type your email address here"
                 type="email"
                 {...register("email", {
-                  required: "Email is required",
+                  required: "Email is required!",
                   pattern: {
                     value: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-zA-z]{2,3}$/,
                     message: "Wrong email format!",
@@ -75,7 +75,7 @@ const Login = () => {
               </FormErrorMessage>
             </FormControl>
 
-            <FormControl>
+            <FormControl isInvalid={errors?.password && true}>
               <FormLabel mb={0} fontWeight="semibold">
                 Password
               </FormLabel>
@@ -84,17 +84,24 @@ const Login = () => {
                   borderWidth="1.2px"
                   placeholder="Type your password address here"
                   type={showPassword ? "text" : "password"}
+                  {...register("password", {
+                    required: "Password is Required!",
+                  })}
                 />
                 <InputRightElement onClick={handleClick}>
                   {showPassword ? <ViewOffIcon /> : <ViewIcon />}
                 </InputRightElement>
               </InputGroup>
+              <FormErrorMessage>
+                <>{errors?.password && errors.password.message}</>
+              </FormErrorMessage>
             </FormControl>
             <Button
               bg="#B7BCC3"
               color="#fff"
               type="submit"
               isLoading={isSubmitting}
+              _hover={{ background: "#9d9fa2" }}
             >
               Sign Up
             </Button>

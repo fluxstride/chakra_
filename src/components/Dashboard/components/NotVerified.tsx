@@ -1,21 +1,29 @@
-import {
-  Alert,
-  AlertDescription,
-  Center,
-  Container,
-  Flex,
-  Link,
-  Text,
-} from "@chakra-ui/react";
+import { Alert, AlertDescription, Center, Link, Text } from "@chakra-ui/react";
+import { API } from "../../../helpers/api";
+import { endpoint } from "../../../utils";
 
-const NotVerified = ({ verificationLink }: { verificationLink: string }) => {
+const NotVerified = ({ verificationToken }: { verificationToken: string }) => {
+  const resendVerificationToken = async () => {
+    try {
+      const response = await API.post(
+        endpoint.user + "/verification-email/send",
+        {
+          token: verificationToken,
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Alert status="warning">
       <AlertDescription>
         <Center width="100vw">
           <Text textAlign="center">
             You have not verified your email address. Click
-            <Link color="blue.500" href={verificationLink}>
+            <Link color="blue.500" onClick={resendVerificationToken}>
               {" "}
               here{" "}
             </Link>{" "}

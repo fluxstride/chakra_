@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useReducer } from "react";
 
-export const authContext = createContext<any>({});
+export const authContext = createContext({} as any);
 
 const initialState = {
   user: sessionStorage.getItem("user") || null,
@@ -9,6 +9,13 @@ const initialState = {
 const reducer = (state: any, action: any) => {
   switch (action.type) {
     case "SIGNUP":
+      sessionStorage.setItem("user", JSON.stringify(action.payload.user));
+      sessionStorage.setItem("token", action.payload.token);
+      return {
+        ...state,
+        user: action.payload.user,
+      };
+    case "VERIFY_USER":
       sessionStorage.setItem("user", JSON.stringify(action.payload.user));
       sessionStorage.setItem("token", action.payload.token);
       return {

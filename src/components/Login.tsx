@@ -27,10 +27,9 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = (data: {}) => {
+  const onSubmit = (data: any) => {
     console.log(data);
   };
-  console.log(errors);
 
   return (
     <Center bg="#FAFAFA" height="100vh" color="#000" p={4}>

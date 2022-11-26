@@ -2,7 +2,6 @@ import { createContext, ReactNode, useReducer } from "react";
 
 export const itemsContext = createContext<any>({});
 
-//
 const initialState: any = [];
 
 const reducer = (state: any, action: any) => {

@@ -9,6 +9,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
+import { IItem } from "../../../@types";
 import { itemsContext } from "../../../contexts/itemsContext";
 import { API } from "../../../helpers/api";
 import { endpoint } from "../../../utils";
@@ -20,10 +21,14 @@ const ItemsList = () => {
 
   useEffect(() => {
     const fetchItems = async () => {
-      const response = await API.get("/items");
-      console.log(response.data.items);
+      try {
+        const response = await API.get("/items");
+        console.log(response.data.items);
 
-      dispatch({ type: "FETCH_ITEMS", payload: response.data.items });
+        dispatch({ type: "FETCH_ITEMS", payload: response.data.items });
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchItems();
   }, [dispatch]);
@@ -39,45 +44,35 @@ const ItemsList = () => {
       <Container maxW={1600}>
         <Flex flexWrap="wrap" p={2} gap={6} mt={4}>
           {items.length > 0 ? (
-            items.map(
-              ({
-                name,
-                description,
-                uuid,
-              }: {
-                name: string;
-                description: string;
-                uuid: string;
-              }) => (
-                <Box
-                  key={name}
-                  width="md"
-                  bg="#fff"
-                  p={6}
-                  borderWidth={2}
-                  borderColor="#F0F0F0"
-                  borderRadius=".5rem"
-                  flexGrow={1}
-                >
-                  <Box mb={2}>
-                    <Text>Name</Text>
-                    <Text fontWeight="bold">{name}</Text>
-                  </Box>
-                  <Text color="#555658">Description</Text>
-                  <Text fontSize="lg">{description}</Text>
-                  <Flex gap={4} float="right" mt={6}>
-                    <Button variant="outline">Edit</Button>
-                    <Button
-                      bg="#555658"
-                      color="#fff"
-                      onClick={() => deleteItem(uuid)}
-                    >
-                      Delete
-                    </Button>
-                  </Flex>
+            items.map(({ name, description, uuid }: IItem) => (
+              <Box
+                key={name}
+                width="md"
+                bg="#fff"
+                p={6}
+                borderWidth={2}
+                borderColor="#F0F0F0"
+                borderRadius=".5rem"
+                flexGrow={1}
+              >
+                <Box mb={2}>
+                  <Text>Name</Text>
+                  <Text fontWeight="bold">{name}</Text>
                 </Box>
-              )
-            )
+                <Text color="#555658">Description</Text>
+                <Text fontSize="lg">{description}</Text>
+                <Flex gap={4} float="right" mt={6}>
+                  <Button variant="outline">Edit</Button>
+                  <Button
+                    bg="#555658"
+                    color="#fff"
+                    onClick={() => deleteItem(uuid)}
+                  >
+                    Delete
+                  </Button>
+                </Flex>
+              </Box>
+            ))
           ) : (
             <Text
               fontSize="lg"

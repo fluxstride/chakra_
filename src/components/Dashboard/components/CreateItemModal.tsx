@@ -19,14 +19,10 @@ import { endpoint } from "../../../utils";
 
 const CreateItemModal = ({ isOpen, onClose }: any) => {
   const { dispatch } = useContext(itemsContext);
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm();
+  const { register, handleSubmit } = useForm();
 
   const createItem = async ({ name, description }: any) => {
-    await API.post(endpoint.items, {
+    const response = await API.post(endpoint.items, {
       name,
       description,
     });
@@ -34,10 +30,11 @@ const CreateItemModal = ({ isOpen, onClose }: any) => {
     dispatch({
       type: "CREATE_ITEM",
       payload: {
-        name,
-        description,
+        ...response.data.item,
       },
     });
+
+    onClose();
   };
   return (
     <>
@@ -53,7 +50,7 @@ const CreateItemModal = ({ isOpen, onClose }: any) => {
                 <Input
                   borderWidth="1.2px"
                   placeholder="Input item name here"
-                  {...register("name")}
+                  {...register("name", { required: true })}
                 />
               </FormControl>
               <FormControl color="#5F6166">
@@ -62,7 +59,7 @@ const CreateItemModal = ({ isOpen, onClose }: any) => {
                   rows={5}
                   borderWidth="1.2px"
                   placeholder="Type here"
-                  {...register("description")}
+                  {...register("description", { required: true })}
                 />
               </FormControl>
             </ModalBody>

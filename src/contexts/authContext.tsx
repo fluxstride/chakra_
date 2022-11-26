@@ -1,10 +1,37 @@
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useReducer } from "react";
 
-const authContext = createContext({});
+export const authContext = createContext<any>({});
 
-const AuthContextProvider = ({ children }: { children: ReactNode }) => {
+const initialState = {
+  user: sessionStorage.getItem("user") || null,
+};
+
+const reducer = (state: any, action: any) => {
+  switch (action.type) {
+    case "SIGNUP":
+      sessionStorage.setItem("user", JSON.stringify(action.payload.user));
+      sessionStorage.setItem("token", action.payload.token);
+      return {
+        ...state,
+        user: action.payload.user,
+      };
+    case "LOGOUT":
+      sessionStorage.clear();
+      return {
+        ...state,
+        user: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const authToken = sessionStorage.getItem("token") || null;
+  console.log(authToken);
   return (
-    <authContext.Provider value={{ user: null }}>
+    <authContext.Provider value={{ state, dispatch }}>
       {children}
     </authContext.Provider>
   );

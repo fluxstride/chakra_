@@ -1,9 +1,13 @@
 import { useEffect } from "react";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { authToken } from "../helpers/api";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   useEffect(() => {
-    redirect("/login");
+    if (!authToken) navigate("/login");
+    navigate("/dashboard");
   }, []);
   return <div>Home</div>;
 };

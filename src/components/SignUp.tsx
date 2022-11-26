@@ -13,12 +13,14 @@ import {
   Link,
   Text,
 } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useForm } from "react-hook-form";
 import PageLink from "./common/PageLink";
 import PasswordValidationSignals from "./PasswordValidationSignals";
+import useSignup from "../hooks/useSignup";
 
 const SignUp = () => {
+  const { signUp, error, isLoading } = useSignup();
   const [showPassword, setShowPassword] = useState(false);
   const [PasswordValidations, setPasswordValidations] = useState({
     hasUpperCase: {
@@ -72,8 +74,7 @@ const SignUp = () => {
   const onSubmit = (data: any) => {
     console.log(data);
 
-    // signup(data);
-    // getItems();
+    signUp(data);
   };
 
   return (
@@ -198,7 +199,7 @@ const SignUp = () => {
               bg="#B7BCC3"
               color="#fff"
               type="submit"
-              isLoading={isSubmitting}
+              isLoading={isLoading}
             >
               Sign Up
             </Button>
